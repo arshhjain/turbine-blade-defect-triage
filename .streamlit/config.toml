@@ -1,0 +1,14 @@
+# Look of the demo page (colours match the slide deck)
+[theme]
+base = "light"
+primaryColor = "#1F7A8C"
+backgroundColor = "#F5F7F8"
+secondaryBackgroundColor = "#E6EEF0"
+textColor = "#0F2A36"
+font = "sans-serif"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

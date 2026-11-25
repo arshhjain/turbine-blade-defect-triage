@@ -1,0 +1,108 @@
+{
+  "model": "Classical_SVM_RBF",
+  "feature_type": "HSV_Histograms_Sobel_Edges_Texture",
+  "test_accuracy": 0.3584905660377358,
+  "test_macro_f1": 0.33215072192067924,
+  "classification_report": {
+    "crack": {
+      "precision": 0.5675675675675675,
+      "recall": 0.7,
+      "f1-score": 0.6268656716417911,
+      "support": 30.0
+    },
+    "craze_crack": {
+      "precision": 0.47619047619047616,
+      "recall": 0.35714285714285715,
+      "f1-score": 0.40816326530612246,
+      "support": 28.0
+    },
+    "delamination": {
+      "precision": 0.18181818181818182,
+      "recall": 0.05405405405405406,
+      "f1-score": 0.08333333333333333,
+      "support": 37.0
+    },
+    "erosion": {
+      "precision": 0.2727272727272727,
+      "recall": 0.25,
+      "f1-score": 0.2608695652173913,
+      "support": 24.0
+    },
+    "lightning_damage": {
+      "precision": 0.21052631578947367,
+      "recall": 0.26666666666666666,
+      "f1-score": 0.23529411764705882,
+      "support": 15.0
+    },
+    "surface_damage": {
+      "precision": 0.2857142857142857,
+      "recall": 0.56,
+      "f1-score": 0.3783783783783784,
+      "support": 25.0
+    },
+    "accuracy": 0.3584905660377358,
+    "macro avg": {
+      "precision": 0.33242401663454296,
+      "recall": 0.36464392964392967,
+      "f1-score": 0.33215072192067924,
+      "support": 159.0
+    },
+    "weighted avg": {
+      "precision": 0.33920653781626964,
+      "recall": 0.3584905660377358,
+      "f1-score": 0.3306139352235298,
+      "support": 159.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      21,
+      6,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      2,
+      10,
+      1,
+      7,
+      3,
+      5
+    ],
+    [
+      3,
+      1,
+      2,
+      5,
+      4,
+      22
+    ],
+    [
+      7,
+      3,
+      1,
+      6,
+      4,
+      3
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      4,
+      5
+    ],
+    [
+      2,
+      0,
+      5,
+      1,
+      3,
+      14
+    ]
+  ],
+  "training_time_seconds": 7.915222644805908
+}

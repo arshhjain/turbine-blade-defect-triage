@@ -1,0 +1,49 @@
+
+========================================================
+RUN: ablation_B_resnet50_cbam | Device: cuda | Multitask: False | CBAM: True
+Resolution: 224x224 | Epochs: 12 | Batch: 16 | LR: 0.0003
+========================================================
+
+Epoch [01/12] Train Loss: 1.3714 | Val Loss: 0.7011 | Val Acc: 72.33% | Val F1: 69.48% | 30.1s
+Epoch [02/12] Train Loss: 0.7603 | Val Loss: 0.5150 | Val Acc: 81.13% | Val F1: 79.47% | 26.8s
+Epoch [03/12] Train Loss: 0.5957 | Val Loss: 0.3868 | Val Acc: 89.94% | Val F1: 87.60% | 26.9s
+Epoch [04/12] Train Loss: 0.5138 | Val Loss: 0.4117 | Val Acc: 87.42% | Val F1: 87.59% | 24.6s
+Epoch [05/12] Train Loss: 0.4151 | Val Loss: 0.2679 | Val Acc: 90.57% | Val F1: 90.60% | 24.4s
+Epoch [06/12] Train Loss: 0.3771 | Val Loss: 0.1664 | Val Acc: 93.71% | Val F1: 93.26% | 23.9s
+Epoch [07/12] Train Loss: 0.3313 | Val Loss: 0.1596 | Val Acc: 94.97% | Val F1: 94.79% | 23.5s
+Epoch [08/12] Train Loss: 0.2640 | Val Loss: 0.1259 | Val Acc: 94.97% | Val F1: 94.89% | 23.5s
+Epoch [09/12] Train Loss: 0.1866 | Val Loss: 0.1056 | Val Acc: 96.86% | Val F1: 96.98% | 23.9s
+Epoch [10/12] Train Loss: 0.1934 | Val Loss: 0.0610 | Val Acc: 98.11% | Val F1: 98.20% | 23.5s
+Epoch [11/12] Train Loss: 0.1490 | Val Loss: 0.0751 | Val Acc: 96.23% | Val F1: 96.30% | 23.6s
+Epoch [12/12] Train Loss: 0.1234 | Val Loss: 0.0793 | Val Acc: 96.86% | Val F1: 96.97% | 23.6s
+
+Training completed in 5.12 minutes. Best Val F1: 98.20%.
+
+=================================================================
+EVALUATING BEST CHECKPOINT ON HELD-OUT TEST SPLIT (N=159)
+=================================================================
+Test Accuracy : 94.34% | Test Macro F1: 93.75%
+
+Defect Classification Breakdown:
+                  precision    recall  f1-score   support
+
+           crack       1.00      1.00      1.00        30
+     craze_crack       0.88      1.00      0.93        28
+    delamination       1.00      0.89      0.94        37
+         erosion       0.92      0.92      0.92        24
+lightning_damage       1.00      0.80      0.89        15
+  surface_damage       0.89      1.00      0.94        25
+
+        accuracy                           0.94       159
+       macro avg       0.95      0.93      0.94       159
+    weighted avg       0.95      0.94      0.94       159
+
+Confusion Matrix:
+[[30  0  0  0  0  0]
+ [ 0 28  0  0  0  0]
+ [ 0  1 33  1  0  2]
+ [ 0  1  0 22  0  1]
+ [ 0  2  0  1 12  0]
+ [ 0  0  0  0  0 25]]
+
+Final evaluation saved to: C:\Users\arsh\.gemini\antigravity\scratch\turbine_blade_defect_mvp\outputs\ablation_B_resnet50_cbam\test_evaluation_report.json

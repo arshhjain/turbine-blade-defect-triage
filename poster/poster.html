@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Blade Defect Triage Poster</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root{
+    --ink:#0F2A36; --muted:#4F6670; --teal:#1F7A8C; --teal-soft:#E3F0F2; --line:#D3E0E3;
+    --amber:#F2A541; --red:#C8553D; --green:#3A9D5D; --paper:#FFFFFF; --bg:#F5F7F8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:var(--paper);}
+  body{font-family:"Segoe UI",Arial,sans-serif; color:var(--ink); font-size:7.1pt; line-height:1.28;
+       -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  .page{width:210mm; height:297mm; padding:9mm 9mm 7mm; display:flex; flex-direction:column; overflow:hidden;}
+
+  /* header */
+  header{display:flex; justify-content:space-between; align-items:flex-start; gap:6mm;
+         border-bottom:1.4pt solid var(--ink); padding-bottom:3mm;}
+  .kicker{font-size:6.4pt; letter-spacing:.14em; font-weight:700; color:var(--teal); text-transform:uppercase;}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:22pt; line-height:1.05; margin:1.2mm 0 1.2mm; letter-spacing:-.01em;}
+  .sub{font-size:9pt; color:var(--muted);}
+  .sub b{color:var(--ink);}
+  .badges{display:flex; gap:2mm; margin-top:2.2mm; flex-wrap:wrap;}
+  .badge{border:1pt solid var(--ink); border-radius:2mm; padding:.8mm 2.2mm; font-size:7pt; font-weight:600;}
+  .badge.dark{background:var(--ink); color:#fff;}
+  .who{min-width:52mm; font-size:7.4pt; text-align:left;}
+  .who .row{display:flex; gap:2mm; align-items:flex-end; margin-bottom:2.4mm;}
+  .who .lab{color:var(--muted); width:17mm; font-size:6.8pt;}
+  .who .fill{flex:1; border-bottom:.6pt solid var(--muted); height:4mm;}
+
+  /* grid */
+  .grid{flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:3mm; margin-top:3mm; min-height:0;}
+  .col{display:flex; flex-direction:column; gap:3mm; min-height:0;}
+  .card{border:.7pt solid var(--line); border-radius:2.2mm; padding:2.2mm 2.6mm; background:#fff;}
+  .card.fill{flex:1;}
+  .num{display:inline-flex; width:4.6mm; height:4.6mm; border-radius:50%; background:var(--ink); color:#fff;
+       font-size:6.6pt; font-weight:700; align-items:center; justify-content:center; margin-bottom:1mm;}
+  h2{font-family:Georgia,"Times New Roman",serif; font-size:9.8pt; line-height:1.15;}
+  .tag{font-family:Georgia,serif; font-style:italic; color:var(--muted); font-size:7pt; margin-bottom:1.4mm;}
+  p{margin-bottom:1.2mm;}
+  ul{padding-left:3.2mm; margin-bottom:1mm;} li{margin-bottom:.6mm;}
+  .hl{background:#FFF1C9; padding:0 .6mm;}
+  .note{background:var(--teal-soft); border-radius:1.4mm; padding:1.6mm 2mm; font-size:7pt; margin-top:1.2mm;}
+  .warn{background:#FBE9E4; border-radius:1.4mm; padding:1.6mm 2mm; font-size:7pt; margin-top:1.2mm;}
+  small, .tiny{font-size:6.3pt; color:var(--muted);}
+
+  /* bars */
+  .bars{display:grid; grid-template-columns:20mm 1fr 9mm; gap:.9mm 1.6mm; align-items:center; margin:1mm 0;}
+  .bars .l{font-size:6.8pt; white-space:nowrap;}
+  .bars .t{height:2.6mm; background:#EEF3F4; border-radius:.8mm; overflow:hidden;}
+  .bars .b{height:100%; background:#8FA9B1; border-radius:.8mm;}
+  .bars .b.teal{background:var(--teal);} .bars .b.amber{background:var(--amber);} .bars .b.dark{background:var(--ink);}
+  .bars .v{font-size:6.8pt; font-weight:700; text-align:right;}
+
+  /* thumbnails */
+  .thumbs{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.4mm;}
+  .thumbs figure{position:relative;}
+  .thumbs img{width:100%; aspect-ratio:1; object-fit:cover; border-radius:1.2mm; display:block;}
+  .thumbs figcaption{white-space:nowrap; font-size:6.1pt; font-weight:600; margin-top:.4mm; display:flex; justify-content:space-between;}
+  .thumbs figcaption span{color:var(--muted); font-weight:400;}
+
+  /* pipeline */
+  .pipe{display:flex; flex-direction:column; gap:.8mm; margin:1mm 0 1.2mm;}
+  .box{border:.7pt solid var(--ink); border-radius:1.4mm; padding:1.1mm 1.8mm; font-size:6.9pt; background:#fff;}
+  .box b{font-size:7.2pt;}
+  .box.att{border-color:var(--teal); background:var(--teal-soft);}
+  .arrow{text-align:center; color:var(--muted); font-size:6.4pt; line-height:1;}
+  .heads{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1mm;}
+  .heads .box{padding:1mm 1.2mm; font-size:6.4pt;}
+
+  /* terminal */
+  pre{font-family:Consolas,"Courier New",monospace; font-size:6.2pt; line-height:1.38; background:#0F2A36; color:#DDEBEE;
+      border-radius:1.6mm; padding:2mm 2.2mm; white-space:pre; overflow:hidden;}
+  pre .k{color:#F2C46B;} pre .g{color:#7FD3A0;} pre .c{color:#8FA9B1;}
+
+  /* table */
+  table{width:100%; border-collapse:collapse; font-size:6.8pt; margin:1mm 0;}
+  th{text-align:left; font-weight:600; color:var(--muted); border-bottom:.7pt solid var(--ink); padding:.6mm .8mm; font-size:6.3pt;}
+  td{border-bottom:.5pt solid var(--line); padding:.7mm .8mm;}
+  td.r, th.r{text-align:right;}
+  tr.me td{font-weight:700;}
+
+  /* dispatch mini */
+  .flow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:1mm; margin-top:1mm;}
+  .lane{border:.7pt solid var(--line); border-radius:1.2mm; padding:1mm 1.4mm; font-size:6.4pt;}
+  .lane.h{border:.9pt dashed var(--amber); background:#FFF8EC;}
+
+  footer{margin-top:2.6mm; padding-top:1.8mm; border-top:.7pt solid var(--ink); display:flex; justify-content:space-between;
+         font-size:6.4pt; color:var(--muted);}
+  footer code{font-family:Consolas,monospace; color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div>
+    <div class="kicker">Deep Learning Project · Semester V · PyTorch · ResNet50 + CBAM</div>
+    <h1>Wind Turbine Blade Defect Triage</h1>
+    <div class="sub">From one drone photo of a damaged blade: <b>what kind of damage</b> (which repair team) and <b>how urgent</b> (where it goes in the queue).</div>
+    <div class="badges">
+      <span class="badge dark">92.5% defect type on held-out test</span>
+      <span class="badge">Severity off by 0.35 levels on average</span>
+      <span class="badge">159 test images, used once</span>
+    </div>
+  </div>
+  <div class="who">
+    <div class="row"><span class="lab">Name</span><span class="fill"></span></div>
+    <div class="row"><span class="lab">SAP ID</span><span class="fill"></span></div>
+    <div class="row"><span class="lab">Batch</span><span class="fill"></span></div>
+    <div class="row"><span class="lab">Faculty</span><span class="fill"></span></div>
+  </div>
+</header>
+
+<div class="grid">
+
+<!-- ============ COLUMN 1 ============ -->
+<div class="col">
+
+  <section class="card">
+    <div class="num">1</div>
+    <h2>The problem</h2>
+    <div class="tag">triage of damage that has already been reported</div>
+    <p>A blade is flagged as damaged. Two decisions follow: the <b>defect type</b> decides which repair team goes, and the <b>severity (1–5)</b> decides how soon.</p>
+    <ul>
+      <li><b>LiDAR vs CAD</b> rejected: blades bend under their own weight, so the shape never matches the drawing.</li>
+      <li><b>Thermal imaging</b> rejected: sunlight heats the blade unevenly and drowns the signal.</li>
+      <li><b>Hand-made features + SVM</b>: 36%. A CNN that learns its own features: ~93%. So, a CNN.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <div class="num">2</div>
+    <h2>The data</h2>
+    <div class="tag">1,065 public drone photos (Figshare), 6 defect types</div>
+    <div class="bars">
+      <span class="l">Delamination</span><span class="t"><span class="b" style="width:100%;display:block"></span></span><span class="v">237</span>
+      <span class="l">Surface damage</span><span class="t"><span class="b" style="width:88.2%;display:block"></span></span><span class="v">209</span>
+      <span class="l">Craze crack</span><span class="t"><span class="b" style="width:78.9%;display:block"></span></span><span class="v">187</span>
+      <span class="l">Crack</span><span class="t"><span class="b" style="width:74.7%;display:block"></span></span><span class="v">177</span>
+      <span class="l">Erosion</span><span class="t"><span class="b" style="width:70%;display:block"></span></span><span class="v">166</span>
+      <span class="l">Lightning</span><span class="t"><span class="b amber" style="width:37.6%;display:block"></span></span><span class="v">89</span>
+    </div>
+    <p><b>Leak-free split.</b> Neighbouring frames can be near-duplicates, so images were grouped first (361 groups) and whole groups were split: <span class="hl"><b>747 train / 159 val / 159 test</b></span>. No near-copy of a test image is seen in training.</p>
+    <p><b>Severity labels are my own rule</b>, not an industry standard: a base level per type (surface 1, erosion 2, craze 3, crack 4, delamination 4, lightning 5), <b>+1</b> if the damage box covers ≥ 8% of the image, <b>−1</b> if ≤ 0.5%.</p>
+  </section>
+
+  <section class="card fill">
+    <div class="num">3</div>
+    <h2>The six defect types</h2>
+    <div class="tag">all from the test split, never seen in training</div>
+    <div class="thumbs">
+      <figure><img src="img/crack.jpg" alt="crack"><figcaption>Crack <span>4.jpg</span></figcaption></figure>
+      <figure><img src="img/craze_crack.jpg" alt="craze crack"><figcaption>Craze <span>1.jpg</span></figcaption></figure>
+      <figure><img src="img/delamination.jpg" alt="delamination"><figcaption>Delam. <span>7.jpg</span></figcaption></figure>
+      <figure><img src="img/erosion.jpg" alt="erosion"><figcaption>Erosion <span>3.jpg</span></figcaption></figure>
+      <figure><img src="img/surface_damage.jpg" alt="surface damage"><figcaption>Surface <span>2.jpg</span></figcaption></figure>
+      <figure><img src="img/lightning_damage.jpg" alt="lightning damage"><figcaption>Lightning <span>10.jpg</span></figcaption></figure>
+    </div>
+    <p class="tiny" style="margin-top:1.2mm">Cropped around the annotated damage. Labels are the dataset's.</p>
+  </section>
+
+</div>
+
+<!-- ============ COLUMN 2 ============ -->
+<div class="col">
+
+  <section class="card">
+    <div class="num">4</div>
+    <h2>The model</h2>
+    <div class="tag">one network, three answers</div>
+    <div class="pipe">
+      <div class="box"><b>Photo</b> resized to 224 × 224, flips / rotations / blur / colour jitter in training only</div>
+      <div class="arrow">▼</div>
+      <div class="box"><b>ResNet50</b>, pretrained on ImageNet, fully fine-tuned → 7 × 7 × 2048 feature map</div>
+      <div class="arrow">▼</div>
+      <div class="box att"><b>CBAM attention</b> re-weights the map: <b>channel</b> = which features matter, <b>spatial</b> (7×7 conv) = where the damage is</div>
+      <div class="arrow">▼ avg + max pool → 4096 → FC 512, dropout 0.3</div>
+      <div class="heads">
+        <div class="box"><b>Type</b><br>6 classes<br>focal loss</div>
+        <div class="box"><b>Ordinal</b><br>4 yes/no:<br>is it &gt;1, &gt;2, &gt;3, &gt;4?</div>
+        <div class="box"><b>Score</b><br>1 to 5<br>Smooth L1</div>
+      </div>
+    </div>
+    <p><b>Severity level = 1 + number of "yes" answers.</b> Asking "is it worse than k?" keeps the order of the levels, so being off by one costs less than being off by three.</p>
+    <p class="tiny">Loss = focal + 0.5 · Smooth L1 + 0.5 · ordinal BCE. AdamW (lr 3e-4, wd 1e-4), cosine LR, 12 epochs, batch 16, seed 42, on a 4 GB RTX 3050. Best epoch chosen on <b>validation</b>; test set used once.</p>
+  </section>
+
+  <section class="card">
+    <div class="num">5</div>
+    <h2>What it prints</h2>
+    <div class="tag">real output, test image 4.jpg</div>
+<pre><span class="c">&gt; python inference/predict_single.py --image 4.jpg</span>
+Inferred Defect  : <span class="k">CRACK</span>
+Class Confidence : <span class="k">89.53%</span>
+Severity Level   : <span class="k">LEVEL 5</span>  (score 4.79 / 5)
+Ordinal Probabilities:
+  P(Severity &gt; Level 1) = 99.7%  <span class="g">yes</span>
+  P(Severity &gt; Level 2) = 99.6%  <span class="g">yes</span>
+  P(Severity &gt; Level 3) = 99.3%  <span class="g">yes</span>
+  P(Severity &gt; Level 4) = 78.4%  <span class="g">yes</span>  → 1 + 4 = 5</pre>
+    <p class="tiny" style="margin-top:1mm">Also a Streamlit page: pick or upload any image, see all 6 probabilities and the 4 ordinal answers.</p>
+  </section>
+
+  <section class="card fill">
+    <div class="num">6</div>
+    <h2>How it would be used</h2>
+    <div class="tag">dispatch board, a simulation on top of the model</div>
+    <div class="flow">
+      <div class="lane"><b>Crack, craze</b><br>Structural repair</div>
+      <div class="lane"><b>Delamination</b><br>Laminate repair</div>
+      <div class="lane"><b>Erosion</b><br>Leading edge</div>
+      <div class="lane"><b>Lightning</b><br>Lightning protection</div>
+      <div class="lane"><b>Surface</b><br>Coating team</div>
+      <div class="lane h"><b>Conf. &lt; 60%</b><br>Human review</div>
+    </div>
+    <p style="margin-top:1.4mm">Each queue is ordered by predicted severity, then arrival. <b>Routing and ordering are fixed rules on the model output; nothing here is learned.</b></p>
+  </section>
+
+</div>
+
+<!-- ============ COLUMN 3 ============ -->
+<div class="col">
+
+  <section class="card">
+    <div class="num">7</div>
+    <h2>Does it work? Type</h2>
+    <div class="tag">same code, split and seed for every model</div>
+    <table>
+      <tr><th>Model</th><th class="r">Accuracy</th><th class="r">Macro-F1</th></tr>
+      <tr><td>SVM, hand-made features</td><td class="r">35.85%</td><td class="r">33.22%</td></tr>
+      <tr><td><b>A</b> ResNet50</td><td class="r">93.71%</td><td class="r">93.14%</td></tr>
+      <tr><td><b>B</b> A + CBAM</td><td class="r">94.34%</td><td class="r">93.75%</td></tr>
+      <tr class="me"><td><b>C</b> B + focal + severity</td><td class="r">92.45%</td><td class="r">91.61%</td></tr>
+    </table>
+    <div class="note"><b>Honest reading:</b> A, B and C differ by only 1–3 images; McNemar C vs A <b>p = 0.69, not significant</b>. C is used because only it also gives severity.</div>
+  </section>
+
+  <section class="card">
+    <div class="num">8</div>
+    <h2>Does it work? Severity</h2>
+    <div class="tag">mean absolute error in levels, lower is better</div>
+    <div class="bars" style="grid-template-columns:26mm 1fr 9mm">
+      <span class="l">Always say level 4</span><span class="t"><span class="b" style="width:100%;display:block"></span></span><span class="v">0.98</span>
+      <span class="l">Lookup, predicted type</span><span class="t"><span class="b" style="width:54.5%;display:block"></span></span><span class="v">0.54</span>
+      <span class="l">Lookup, <i>true</i> type</span><span class="t"><span class="b dark" style="width:42.3%;display:block"></span></span><span class="v">0.42</span>
+      <span class="l"><b>Learned ordinal head</b></span><span class="t"><span class="b teal" style="width:35.3%;display:block"></span></span><span class="v">0.35</span>
+    </div>
+    <p>Exactly right <b>71.1%</b> of the time vs 58.5% for the true-type lookup. It beats a lookup that already knows the type, so it is reading <b>damage size</b> from the image.</p>
+  </section>
+
+  <section class="card">
+    <div class="num">9</div>
+    <h2>Where it fails</h2>
+    <div class="tag">12 wrong out of 159</div>
+    <ul>
+      <li><b>Lightning is weakest</b>: 73% recall (11 of 15). Rarest class, and burn streaks look like crack networks.</li>
+      <li>7 of 12 wrong answers say "craze crack"; 5 images fool all three models.</li>
+      <li><b>Severity under-calls</b>: 16 of 41 level-5 images rated 4; 3 dangerous misses (two L4→L1, one L5→L2).</li>
+    </ul>
+    <div class="warn">So low confidence, and level 4+, go to a human.</div>
+  </section>
+
+
+  <section class="card fill">
+    <div class="num">10</div>
+    <h2>Limits, and being honest</h2>
+    <div class="tag">what this does not do</div>
+    <ul>
+      <li><b>No healthy blades</b> in the data, so it always names a defect. Next step: an anomaly detector in front.</li>
+      <li><b>Severity uses pixel size</b>, which changes with drone distance. Needs a fixed capture distance.</li>
+      <li>One seed, one label per image, 159 test images.</li>
+      <li>Public data, ImageNet backbone; AI tools helped write the code.</li>
+    </ul>
+  </section>
+</div>
+</div>
+
+<footer>
+  <span>Reproduce: <code>config_unified.yaml</code>, seed 42 · re-score every number with <code>python scripts/verify_test_metrics.py</code></span>
+  <span>PyTorch · torchvision · Albumentations · Streamlit</span>
+</footer>
+
+</div>
+</body>
+</html>

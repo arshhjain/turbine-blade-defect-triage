@@ -1,0 +1,12 @@
+Test images: 159
+Severity head (ordinal)           MAE = 0.346 | exact = 71.1%
+Lookup on PREDICTED class         MAE = 0.535 | exact = 53.5%
+Lookup on TRUE class (upper bound)MAE = 0.415 | exact = 58.5%
+Predict-the-mode (always level 4) MAE = 0.981
+Severity confusion (rows true L1..L5, cols pred L1..L5):
+ [[14  3  0  1  0]
+ [ 1 11  6  1  0]
+ [ 0  1 16  6  0]
+ [ 2  0  1 48  7]
+ [ 0  1  0 16 24]]
+Errors of 2+ levels (true, pred, count): [(1, 4, np.int64(1)), (2, 4, np.int64(1)), (4, 1, np.int64(2)), (5, 2, np.int64(1))]
